@@ -9,17 +9,44 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { Button, Col, Glyphicon, Grid, PageHeader, Row } from 'react-bootstrap';
 
 import injectReducer from 'utils/injectReducer';
-import makeSelectUsersPage from './selectors';
 import reducer from './reducer';
 
 import { makeUserList } from './selectors';
+
+import { createUser, deleteUser, updateUser } from './actions';
+import NewUser from 'components/NewUser';
+import UserList from 'components/UserList';
 
 export class UsersPage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <div>
+        <PageHeader>
+          <Grid fluid>
+            <Row>
+              <Col md={3} mdOffset={1}>
+                User Manager
+              </Col>
+              <Col md={3} mdOffset={5}>
+                <NewUser createUser={this.props.onCreateUser} />
+              </Col>
+            </Row>
+          </Grid>
+        </PageHeader>
+        <Grid fluid>
+          <Row>
+            <Col md={9} mdOffset={1}>
+              <UserList
+                users={this.props.users}
+                deleteUser={this.props.onDeleteUser}
+                updateUser={this.props.onUpdateUser}
+              />
+            </Col>
+          </Row>
+        </Grid>
       </div>
     );
   }
@@ -27,6 +54,9 @@ export class UsersPage extends React.PureComponent { // eslint-disable-line reac
 
 UsersPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  onCreateUser: PropTypes.func,
+  onDeleteUser: PropTypes.func,
+  onUpdateUser: PropTypes.func,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -35,6 +65,9 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
+    onCreateUser: (user) => dispatch(createUser(user)),
+    onDeleteUser: (user) => dispatch(deleteUser(user)),
+    onUpdateUser: (user) => dispatch(updateUser(user)),
     dispatch,
   };
 }
