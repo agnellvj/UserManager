@@ -22,7 +22,15 @@ class UserList extends React.PureComponent { // eslint-disable-line react/prefer
           <Col md={3}>
             <ButtonToolbar>
               <EditUser user={user} updateUser={this.props.updateUser} />
-              <Button bsStyle="danger">Delete</Button>
+              <Button
+                bsStyle="danger"
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.props.deleteUser(user.get('id'));
+                }}
+              >
+                Delete
+              </Button>
             </ButtonToolbar>
           </Col>
         </Row>

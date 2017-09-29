@@ -16,7 +16,7 @@ import reducer from './reducer';
 
 import { makeUserList } from './selectors';
 
-import { createUser, updateUser } from './actions';
+import { createUser, deleteUser, updateUser } from './actions';
 import NewUser from 'components/NewUser';
 import UserList from 'components/UserList';
 
@@ -39,7 +39,11 @@ export class UsersPage extends React.PureComponent { // eslint-disable-line reac
         <Grid fluid>
           <Row>
             <Col md={9} mdOffset={1}>
-              <UserList users={this.props.users} updateUser={this.props.onUpdateUser} />
+              <UserList
+                users={this.props.users}
+                deleteUser={this.props.onDeleteUser}
+                updateUser={this.props.onUpdateUser}
+              />
             </Col>
           </Row>
         </Grid>
@@ -51,6 +55,7 @@ export class UsersPage extends React.PureComponent { // eslint-disable-line reac
 UsersPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   onCreateUser: PropTypes.func,
+  onDeleteUser: PropTypes.func,
   onUpdateUser: PropTypes.func,
 };
 
@@ -61,6 +66,7 @@ const mapStateToProps = createStructuredSelector({
 function mapDispatchToProps(dispatch) {
   return {
     onCreateUser: (user) => dispatch(createUser(user)),
+    onDeleteUser: (user) => dispatch(deleteUser(user)),
     onUpdateUser: (user) => dispatch(updateUser(user)),
     dispatch,
   };
