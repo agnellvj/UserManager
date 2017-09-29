@@ -6,15 +6,23 @@
 
 import { fromJS } from 'immutable';
 import {
-  DEFAULT_ACTION,
+  CREATE_USER,
+  UPDATE_USER,
 } from './constants';
 
-const initialState = fromJS({ users: [] });
+const initialState = fromJS({ last_id: 0, users: [] });
 
 function usersPageReducer(state = initialState, action) {
   switch (action.type) {
-    case DEFAULT_ACTION:
-      return state;
+    case CREATE_USER:
+      const new_user = { ...action.user, id: state.get('last_id') }
+      const new_state = state.set('last_id', state.get('last_id') + 1);
+      return new_state.update('users', u => u.push(fromJS(new_user)));
+    case UPDATE_USER:
+      return state.setIn(
+        ['users', state.get('users').findIndex(u => u.get('id') === action.user.id)],
+        fromJS(action.user)
+      );
     default:
       return state;
   }
